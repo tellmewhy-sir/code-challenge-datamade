@@ -26,22 +26,34 @@ class AddressParse(APIView):
                 }
             })
         else:
-            address_components, address_type = self.parse(address)
-            return Response({
-                'data': {
-                    'input_string': address,
-                    'address_components': address_components,
-                    'address_type': address_type
-                },
-                'error': None
-        })
+            try:
+                address_components, address_type = self.parse(address)
+                return Response({
+                    'data': {
+                        'input_string': address,
+                        'address_components': address_components,
+                        'address_type': address_type
+                    },
+                    'error': None
+                })
+            except Exception as err:
+                return Response({
+                    'data': None,
+                    'error': {
+                        'message': err.__str__()
+                    }
+                })
 
     def parse(self, address):
         # TODO: Implement this method to return the parsed components of a
         # given address using usaddress: https://github.com/datamade/usaddress
 
-        address_parse = usaddress.tag(address)
-        address_components = address_parse[0]
-        address_type = address_parse[1]
+        try:
+            address_parse = usaddress.tag(address)
+            address_components = address_parse[0]
+            address_type = address_parse[1]
+            return address_components, address_type
+        except Exception:
+            raise
 
-        return address_components, address_type
+
