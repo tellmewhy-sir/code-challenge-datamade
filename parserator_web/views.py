@@ -1,7 +1,8 @@
-import usaddress, json
+import usaddress
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.exceptions import ParseError
 
@@ -24,7 +25,7 @@ class AddressParse(APIView):
                 'error': {
                     'message': "Missing 'address' query param "
                 }
-            })
+            }, status.HTTP_400_BAD_REQUEST)
         else:
             try:
                 address_components, address_type = self.parse(address)
@@ -42,7 +43,7 @@ class AddressParse(APIView):
                     'error': {
                         'message': err.__str__()
                     }
-                })
+                }, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def parse(self, address):
         # TODO: Implement this method to return the parsed components of a
@@ -55,5 +56,3 @@ class AddressParse(APIView):
             return address_components, address_type
         except Exception:
             raise
-
-

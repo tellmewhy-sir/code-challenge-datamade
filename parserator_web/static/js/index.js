@@ -19,7 +19,7 @@ $(document).ready(function() {
          return
       }
 
-      fetch(`/api/parse?address=${encodeURIComponent(address)}`)
+      fetch(`/api/parse?city=${encodeURIComponent(address)}`)
       .then(res => res.json())
       .then((response) => {
          const { data, error } = response
