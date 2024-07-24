@@ -12,14 +12,13 @@ $(document).ready(function() {
       const address = $('#js-address').val()
 
       if (!address) {
-      // handle error feedback
          $addressResults.hide()
-         $errorsEl.html('Please enter a valid address')
+         $errorsEl.text('Please enter a valid address')
          $errorsEl.show()
          return
       }
 
-      fetch(`/api/parse?city=${encodeURIComponent(address)}`)
+      fetch(`/api/parse?address=${encodeURIComponent(address)}`)
       .then(res => res.json())
       .then((response) => {
          const { data, error } = response
