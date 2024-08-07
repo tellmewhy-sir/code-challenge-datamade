@@ -24,9 +24,6 @@ def test_api_parse_succeeds(client):
         "address_type": "Street Address"
     })
 
-    # if response.json()['data'] is None:
-    #     pytest.fail()
-
     assert response.json()['data'] is not None
 
     assert response.json()['data'] == expected_dict
@@ -39,8 +36,7 @@ def test_api_parse_raises_error(client):
     response = client.get('/api/parse/', {"address": address_string})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    if response.json()['data'] is not None:
-        pytest.fail()
+    assert response.json()['data'] is None
 
     response = client.get('/api/parse/', {"city": address_string})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
