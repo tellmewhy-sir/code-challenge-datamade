@@ -17,18 +17,22 @@ $(document).ready(function() {
          const { data, error } = response
 
          if (error) {
+            $addressResults.hide()
             $errorsEl.text(error.message)
             throw new Error()
          }
          const { address_components, address_type } = data
-         const resultsTableHtml = Object.keys(address_components).map((tag) => (
-            `
-            <tr>
-               <td>${tag}</td>
-               <td>${address_components[tag]}</td>
-            </tr>
-            `
-         )).join('')
+         const resultsTableHtml = Object
+            .keys(address_components)
+            .map((tag) => (
+               `
+               <tr>
+                  <td>${tag}</td>
+                  <td>${address_components[tag]}</td>
+               </tr>
+               `
+            ))
+            .join('')
          $('#js-results-table').html(resultsTableHtml)
          $('#js-parse-type').text(address_type)
          $addressResults.show()
