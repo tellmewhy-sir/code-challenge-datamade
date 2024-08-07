@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
-from rest_framework.exceptions import ParseError
 
 
 class Home(TemplateView):
@@ -34,7 +33,7 @@ class AddressParse(APIView):
                 return Response({
                     'data': None,
                     'error': {
-                        'message': 'Invalid address provided. Please remove any duplicates from the address and try submitting again.'
+                        'message': 'Invalid address. Please remove any duplicates.'
                     }
                 }, status.HTTP_400_BAD_REQUEST)
             except Exception as err:
@@ -42,7 +41,7 @@ class AddressParse(APIView):
                 return Response({
                     'data': None,
                     'error': {
-                        'message': 'An error occurred on the server. Please reach out to the support team.'
+                        'message': 'Server error. Please reach out to support.'
                     }
                 }, status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
@@ -62,4 +61,3 @@ class AddressParse(APIView):
         address_components = address_parse[0]
         address_type = address_parse[1]
         return address_components, address_type
-
