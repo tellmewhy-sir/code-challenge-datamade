@@ -11,13 +11,6 @@ $(document).ready(function() {
 
       const address = $('#js-address').val()
 
-      if (!address) {
-         $addressResults.hide()
-         $errorsEl.text('Please enter a valid address')
-         $errorsEl.show()
-         return
-      }
-
       fetch(`/api/parse?address=${encodeURIComponent(address)}`)
       .then(res => res.json())
       .then((response) => {
