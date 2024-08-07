@@ -29,6 +29,23 @@ class AddressParse(APIView):
         else:
             try:
                 address_components, address_type = self.parse(address)
+            except usaddress.RepeatedLabelError as err:
+                print(str(err))
+                return Response({
+                    'data': None,
+                    'error': {
+                        'message': 'Invalid address provided. Please remove any duplicates from the address and try submitting again.'
+                    }
+                }, status.HTTP_400_BAD_REQUEST)
+            except Exception as err:
+                print(str(err))
+                return Response({
+                    'data': None,
+                    'error': {
+                        'message': 'An error occurred on the server. Please reach out to the support team.'
+                    }
+                }, status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
                 return Response({
                     'data': {
                         'input_string': address,
@@ -37,22 +54,12 @@ class AddressParse(APIView):
                     },
                     'error': None
                 })
-            except Exception as err:
-                return Response({
-                    'data': None,
-                    'error': {
-                        'message': err.__str__()
-                    }
-                }, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def parse(self, address):
         # TODO: Implement this method to return the parsed components of a
         # given address using usaddress: https://github.com/datamade/usaddress
+        address_parse = usaddress.tag(address)
+        address_components = address_parse[0]
+        address_type = address_parse[1]
+        return address_components, address_type
 
-        try:
-            address_parse = usaddress.tag(address)
-            address_components = address_parse[0]
-            address_type = address_parse[1]
-            return address_components, address_type
-        except Exception:
-            raise
